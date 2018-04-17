@@ -1,4 +1,4 @@
-# Input Debug Utility
+# Input Debugger
 
 Logs joystick button and axis inputs to the Unity console
 
