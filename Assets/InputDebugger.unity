@@ -204,6 +204,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12253a11d8bfb014eaf40b0153c240a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debugAxes: 1
+  debugButtons: 1
 --- !u!4 &2048142092
 Transform:
   m_ObjectHideFlags: 0

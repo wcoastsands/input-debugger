@@ -1,61 +1,80 @@
 using UnityEngine;
-using System.Collections.Generic;
 
-public class InputDebugger : MonoBehaviour
+namespace Nikkolai
 {
-	private string[] _joystickNames = new string[0];
-	private JoystickDebugger[] _joystickDebuggers = new JoystickDebugger[0];
+    public class InputDebugger : MonoBehaviour
+    {
+        [Tooltip("Logs input of joystick axes 1 through 10.")]
+        public bool debugAxes;
+        [Tooltip("Logs input of joystick buttons 0 through 19.")]
+        public bool debugButtons;
 
-	void Start ()
-	{
-		UpdateJoysticks();
-	}
+        static readonly int k_FirstAxis = 1;
+        static readonly int k_LastAxis = 10;
+        static readonly string k_AxisErrorMessage = string.Format(
+            "Input Manager must contain axis inputs for \"Joystick Axis {0}\" through \"Joystick Axis {1}\" before debugging axes.",
+            k_FirstAxis,
+            k_LastAxis
+        );
 
-	void Update ()
-	{
-		if (_joystickNames.Length != Input.GetJoystickNames().Length)
-		{
-			UpdateJoysticks();
-		}
-	}
+        string[] m_JoystickNames;
+        float m_AxisValue = 0f;
+        int m_ButtonIndex = 0;
 
-	private void UpdateJoysticks ()
-	{
-		List<JoystickDebugger> debuggers = new List<JoystickDebugger>();
+        void Start ()
+        {
+            m_JoystickNames = Input.GetJoystickNames();
 
-		_joystickNames = Input.GetJoystickNames();
+            var message = m_JoystickNames.Length > 0 ?
+                string.Format("Found {0} joysticks:", m_JoystickNames.Length) :
+                "No joysticks found.";
 
-		Debug.Log("Number of joysticks attached: " + _joystickNames.Length);
+            foreach (string joystickName in m_JoystickNames)
+            {
+                message += string.Format(" {0},", joystickName);
+            }
 
-		foreach (JoystickDebugger debugger in _joystickDebuggers)
-		{
-			Destroy(debugger.gameObject);
-		}
+            Debug.Log(message.TrimEnd(','));
+        }
 
-		for (int i = 0; i < _joystickNames.Length; i++)
-		{
-			if (string.IsNullOrEmpty(_joystickNames[i]))
-				continue;
+        void Update ()
+        {
+            if (debugAxes)
+            {
+                for (int i = 1; i <= 10; i++)
+                {
+                    try
+                    {
+                        m_AxisValue = Input.GetAxis(string.Format("Joystick Axis {0}", i));
+                    }
+                    catch
+                    {
+                        Debug.LogErrorFormat("Axis name \"Joystick Axis {0}\" is invalid. {1}", i, k_AxisErrorMessage);
+                        debugAxes = false;
+                        break;
+                    }
 
-			JoystickDebugger debugger;
-			GameObject gO = new GameObject();
-			gO.transform.parent = transform;
-			gO.name = string.Format("{0} {1}", i, _joystickNames[i]);
+                    if (m_AxisValue != 0f)
+                    {
+                        Debug.Log(string.Format("Gamepad axis {0} is active ({1}).", i, m_AxisValue));
+                    }
+                }
+            }
 
-			switch (_joystickNames[i])
-			{
-				case "Motion Controller":
-					debugger = (JoystickDebugger)gO.AddComponent<PSMoveDebugger>();
-					break;
-				default:
-					debugger = gO.AddComponent<JoystickDebugger>();
-					break;
-			}
+            if (debugButtons && Input.anyKeyDown)
+            {
+                m_ButtonIndex = 0;
 
-			debugger.index = i;
-			debuggers.Add(debugger);
-		}
+                for (int i = 330; i <= 349; i++) // JoystickButton0 through JoystickButton19
+                {
+                    if (Input.GetKeyDown((KeyCode)i))
+                    {
+                        Debug.Log(string.Format("Gamepad button {0} pressed.", m_ButtonIndex));
+                    }
 
-		_joystickDebuggers = debuggers.ToArray();
-	}
+                    m_ButtonIndex++;
+                }
+            }
+        }
+    }
 }
