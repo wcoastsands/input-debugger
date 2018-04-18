@@ -1,62 +1,76 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Nikkolai
 {
     public class InputDebugger : MonoBehaviour
     {
-        [Tooltip("Logs input of joystick axes 1 through 10.")]
+        [Tooltip("Axis names found in the Input Manager.")]
+        public string[] axisNames = {
+            "Horizontal",
+            "Vertical",
+            "Look X",
+            "Look Y",
+            "Joystick Axis 5",
+            "Joystick Axis 6",
+            "Joystick Axis 7",
+            "Joystick Axis 8",
+            "Joystick Axis 9",
+            "Joystick Axis 10",
+        };
+        [Tooltip("Logs input values of axis names listed above.")]
         public bool debugAxes;
         [Tooltip("Logs input of joystick buttons 0 through 19.")]
         public bool debugButtons;
-
-        static readonly int k_FirstAxis = 1;
-        static readonly int k_LastAxis = 10;
-        static readonly string k_AxisErrorMessage = string.Format(
-            "Input Manager must contain axis inputs for \"Joystick Axis {0}\" through \"Joystick Axis {1}\" before debugging axes.",
-            k_FirstAxis,
-            k_LastAxis
-        );
 
         string[] m_JoystickNames;
         float m_AxisValue = 0f;
         int m_ButtonIndex = 0;
 
+        readonly List<string> m_InvalidAxisNames = new List<string>();
+
         void Start ()
         {
-            m_JoystickNames = Input.GetJoystickNames();
+            // Only log joystick names from editor and development builds.
+            if (Debug.isDebugBuild) LogJoystickNames();
+        }
 
-            var message = m_JoystickNames.Length > 0 ?
-                string.Format("Found {0} joysticks:", m_JoystickNames.Length) :
-                "No joysticks found.";
+        void OnEnable ()
+        {
+            // Only debug inputs from editor and development builds.
+            enabled = Debug.isDebugBuild;
+        }
 
-            foreach (string joystickName in m_JoystickNames)
-            {
-                message += string.Format(" {0},", joystickName);
-            }
-
-            Debug.Log(message.TrimEnd(','));
+        void OnDisable ()
+        {
+            m_InvalidAxisNames.Clear();
         }
 
         void Update ()
         {
             if (debugAxes)
             {
-                for (int i = 1; i <= 10; i++)
+                for (int i = 0; i < axisNames.Length; i++)
                 {
+                    if (string.IsNullOrEmpty(axisNames[i]) || m_InvalidAxisNames.Contains(axisNames[i]))
+                    {
+                        continue;
+                    }
+
                     try
                     {
-                        m_AxisValue = Input.GetAxis(string.Format("Joystick Axis {0}", i));
+                        m_AxisValue = Input.GetAxis(axisNames[i]);
                     }
                     catch
                     {
-                        Debug.LogErrorFormat("Axis name \"Joystick Axis {0}\" is invalid. {1}", i, k_AxisErrorMessage);
-                        debugAxes = false;
-                        break;
+                        Debug.LogWarningFormat("Input Manager does not contain an axis named \"{0}\".", axisNames[i]);
+                        m_InvalidAxisNames.Add(axisNames[i]);
+                        continue;
                     }
 
                     if (m_AxisValue != 0f)
                     {
-                        Debug.Log(string.Format("Gamepad axis {0} is active ({1}).", i, m_AxisValue));
+                        Debug.Log(string.Format("\"{0}\" is active ({1}).", axisNames[i], m_AxisValue));
                     }
                 }
             }
@@ -75,6 +89,22 @@ namespace Nikkolai
                     m_ButtonIndex++;
                 }
             }
+        }
+
+        void LogJoystickNames ()
+        {
+            m_JoystickNames = Input.GetJoystickNames();
+
+            var message = m_JoystickNames.Length > 0 ?
+                string.Format("Found {0} joysticks:", m_JoystickNames.Length) :
+                "No joysticks found.";
+
+            foreach (string joystickName in m_JoystickNames)
+            {
+                message += string.Format(" {0},", joystickName);
+            }
+
+            Debug.Log(message.TrimEnd(','));
         }
     }
 }
