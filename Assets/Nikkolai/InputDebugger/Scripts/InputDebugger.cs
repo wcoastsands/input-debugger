@@ -1,10 +1,18 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Nikkolai
 {
     public class InputDebugger : MonoBehaviour
     {
+        [System.Serializable]
+        public class OnAxisInput : UnityEvent<string, float> { }
+        [System.Serializable]
+        public class OnJoystickButtonDown : UnityEvent<int> { }
+        [System.Serializable]
+        public class OnJoystickButtonUp : UnityEvent<int> { }
+
         [Tooltip("Axis names found in the Input Manager.")]
         public string[] axisNames = {
             "Horizontal",
@@ -19,9 +27,16 @@ namespace Nikkolai
             "Joystick Axis 10",
         };
         [Tooltip("Logs input values of axis names listed above.")]
-        public bool debugAxes;
-        [Tooltip("Logs input of joystick buttons 0 through 19.")]
-        public bool debugButtons;
+        public bool logAxisInputs;
+        [Tooltip("Logs input on joystick button down.")]
+        public bool logJoystickButtonDown;
+        [Tooltip("Logs input on joystick button up.")]
+        public bool logJoystickButtonUp;
+
+        [Space]
+        public OnAxisInput onAxisInput;
+        public OnJoystickButtonDown onJoystickButtonDown;
+        public OnJoystickButtonUp onJoystickButtonUp;
 
         string[] m_JoystickNames;
         float m_AxisValue = 0f;
@@ -50,22 +65,15 @@ namespace Nikkolai
 
                 for (int i = 0; i < axisNames.Length; i++)
                 {
-                    m_AxisNames.Add(axisNames[i]);
+                    m_AxisNames.Insert(0, axisNames[i]);
                 }
             }
         }
 
         void Update ()
         {
-            if (debugAxes)
-            {
-                DebugAxes();
-            }
-
-            if (debugButtons && Input.anyKeyDown)
-            {
-                DebugButtons();
-            }
+            DebugAxisInputs();
+            DebugJoystickButtons();
         }
 
         void LogJoystickNames ()
@@ -84,9 +92,9 @@ namespace Nikkolai
             Debug.Log(message.TrimEnd(','));
         }
 
-        void DebugAxes ()
+        void DebugAxisInputs ()
         {
-            // Loop in reverse to avoid errors after the removal of invalid names.
+            // Loop in reverse to avoid errors when removing invalid names.
             for (int i = m_AxisNames.Count - 1; i >= 0; i--)
             {
                 try
@@ -102,21 +110,49 @@ namespace Nikkolai
 
                 if (m_AxisValue != 0f)
                 {
-                    Debug.Log(string.Format("\"{0}\" is active ({1}).", m_AxisNames[i], m_AxisValue));
+                    if (logAxisInputs)
+                    {
+                        Debug.Log(string.Format("\"{0}\" is active ({1}).", m_AxisNames[i], m_AxisValue));
+                    }
+
+                    if (onAxisInput != null)
+                    {
+                        onAxisInput.Invoke(m_AxisNames[i], m_AxisValue);
+                    }
                 }
             }
         }
 
-        void DebugButtons ()
+        void DebugJoystickButtons ()
         {
             m_ButtonIndex = 0;
 
-            // For KeyCode values JoystickButton0 through JoystickButton19...
-            for (int i = 330; i <= 349; i++)
+            for (int i = (int)KeyCode.JoystickButton0; i <= (int)KeyCode.JoystickButton19; i++)
             {
-                if (Input.GetKeyDown((KeyCode)i))
+                if ((logJoystickButtonDown || onJoystickButtonDown != null) && Input.GetKeyDown((KeyCode)i))
                 {
-                    Debug.Log(string.Format("Gamepad button {0} pressed.", m_ButtonIndex));
+                    if (logJoystickButtonDown)
+                    {
+                        Debug.Log(string.Format("Gamepad button {0} pressed.", m_ButtonIndex));
+                    }
+
+                    if (onJoystickButtonDown != null)
+                    {
+                        onJoystickButtonDown.Invoke(m_ButtonIndex);
+                    }
+                }
+
+                if ((logJoystickButtonUp || onJoystickButtonUp != null) && Input.GetKeyUp((KeyCode)i))
+                {
+                    if (logJoystickButtonUp)
+                    {
+                        Debug.Log(string.Format("Gamepad button {0} released.", m_ButtonIndex));
+                    }
+
+                    if (onJoystickButtonUp != null)
+                    {
+                        onJoystickButtonUp.Invoke(m_ButtonIndex);
+                    }
                 }
 
                 m_ButtonIndex++;

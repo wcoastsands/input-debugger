@@ -204,8 +204,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12253a11d8bfb014eaf40b0153c240a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugAxes: 1
-  debugButtons: 1
+  axisNames:
+  - Horizontal
+  - Vertical
+  - Look X
+  - Look Y
+  - Joystick Axis 5
+  - Joystick Axis 6
+  - Joystick Axis 7
+  - Joystick Axis 8
+  - Joystick Axis 9
+  - Joystick Axis 10
+  logAxisInputs: 1
+  logJoystickButtonDown: 1
+  logJoystickButtonUp: 1
+  onAxisInput:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Nikkolai.InputDebugger+OnAxisInput, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  onJoystickButtonDown:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Nikkolai.InputDebugger+OnJoystickButtonDown, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  onJoystickButtonUp:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Nikkolai.InputDebugger+OnJoystickButtonUp, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!4 &2048142092
 Transform:
   m_ObjectHideFlags: 0
