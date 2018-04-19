@@ -4,6 +4,7 @@ using UnityEngine.Events;
 
 namespace Nikkolai
 {
+    [HelpURL("https://github.com/wcoastsands/input-debugger/wiki")]
     public class InputDebugger : MonoBehaviour
     {
         [System.Serializable]
