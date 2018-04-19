@@ -215,13 +215,29 @@ MonoBehaviour:
   - Joystick Axis 8
   - Joystick Axis 9
   - Joystick Axis 10
-  logAxisInputs: 1
+  buttonNames:
+  - Jump
+  - Crouch
+  - Sprint
+  logInputAxisValues: 1
+  logInputButtonDown: 1
+  logInputButtonUp: 0
   logJoystickButtonDown: 1
-  logJoystickButtonUp: 1
+  logJoystickButtonUp: 0
   onAxisInput:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: Nikkolai.InputDebugger+OnAxisInput, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  onInputButtonDown:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Nikkolai.InputDebugger+OnInputButtonDown, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  onInputButtonUp:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Nikkolai.InputDebugger+OnInputButtonUp, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   onJoystickButtonDown:
     m_PersistentCalls:

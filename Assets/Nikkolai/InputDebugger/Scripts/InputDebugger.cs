@@ -9,6 +9,10 @@ namespace Nikkolai
         [System.Serializable]
         public class OnAxisInput : UnityEvent<string, float> { }
         [System.Serializable]
+        public class OnInputButtonDown : UnityEvent<string> { }
+        [System.Serializable]
+        public class OnInputButtonUp : UnityEvent<string> { }
+        [System.Serializable]
         public class OnJoystickButtonDown : UnityEvent<int> { }
         [System.Serializable]
         public class OnJoystickButtonUp : UnityEvent<int> { }
@@ -24,17 +28,29 @@ namespace Nikkolai
             "Joystick Axis 7",
             "Joystick Axis 8",
             "Joystick Axis 9",
-            "Joystick Axis 10",
+            "Joystick Axis 10"
         };
-        [Tooltip("Logs input values of axis names listed above.")]
-        public bool logAxisInputs;
-        [Tooltip("Logs input on joystick button down.")]
+        [Tooltip("Button names found in the Input Manager.")]
+        public string[] buttonNames = {
+            "Jump",
+            "Crouch",
+            "Sprint"
+        };
+        [Tooltip("Logs input values for axis names listed above.")]
+        public bool logInputAxisValues;
+        [Tooltip("Logs button presses for button names listed above.")]
+        public bool logInputButtonDown;
+        [Tooltip("Logs button releases for button names listed above.")]
+        public bool logInputButtonUp;
+        [Tooltip("Logs joystick button presses.")]
         public bool logJoystickButtonDown;
-        [Tooltip("Logs input on joystick button up.")]
+        [Tooltip("Logs joystick button releases.")]
         public bool logJoystickButtonUp;
 
         [Space]
         public OnAxisInput onAxisInput;
+        public OnInputButtonDown onInputButtonDown;
+        public OnInputButtonUp onInputButtonUp;
         public OnJoystickButtonDown onJoystickButtonDown;
         public OnJoystickButtonUp onJoystickButtonUp;
 
@@ -44,6 +60,8 @@ namespace Nikkolai
 
         // Validated list of axis names.
         readonly List<string> m_AxisNames = new List<string>();
+        // Validated list of button names.
+        readonly List<string> m_ButtonNames = new List<string>();
 
         void Start ()
         {
@@ -67,12 +85,18 @@ namespace Nikkolai
                 {
                     m_AxisNames.Insert(0, axisNames[i]);
                 }
+
+                for (int i = 0; i < buttonNames.Length; i++)
+                {
+                    m_ButtonNames.Insert(0, buttonNames[i]);
+                }
             }
         }
 
         void Update ()
         {
-            DebugAxisInputs();
+            DebugInputAxes();
+            DebugInputButtons();
             DebugJoystickButtons();
         }
 
@@ -92,7 +116,7 @@ namespace Nikkolai
             Debug.Log(message.TrimEnd(','));
         }
 
-        void DebugAxisInputs ()
+        void DebugInputAxes ()
         {
             // Loop in reverse to avoid errors when removing invalid names.
             for (int i = m_AxisNames.Count - 1; i >= 0; i--)
@@ -110,15 +134,57 @@ namespace Nikkolai
 
                 if (m_AxisValue != 0f)
                 {
-                    if (logAxisInputs)
+                    if (logInputAxisValues)
                     {
-                        Debug.Log(string.Format("\"{0}\" is active ({1}).", m_AxisNames[i], m_AxisValue));
+                        Debug.Log(string.Format("Input axis \"{0}\" is active ({1}).", m_AxisNames[i], m_AxisValue));
                     }
 
                     if (onAxisInput != null)
                     {
                         onAxisInput.Invoke(m_AxisNames[i], m_AxisValue);
                     }
+                }
+            }
+        }
+
+        void DebugInputButtons ()
+        {
+            // Loop in reverse to avoid errors when removing invalid names.
+            for (int i = m_ButtonNames.Count - 1; i >= 0; i--)
+            {
+                try
+                {
+                    if ((logInputButtonDown || onInputButtonDown != null) && Input.GetButtonDown(m_ButtonNames[i]))
+                    {
+                        if (logInputButtonDown)
+                        {
+                            Debug.Log(string.Format("Input button \"{0}\" pressed.", m_ButtonNames[i]));
+                        }
+
+                        if (onInputButtonDown != null)
+                        {
+                            onInputButtonDown.Invoke(m_ButtonNames[i]);
+                        }
+                    }
+
+                    if ((logInputButtonUp || onInputButtonUp != null) && Input.GetButtonUp(m_ButtonNames[i]))
+                    {
+                        if (logInputButtonUp)
+                        {
+                            Debug.Log(string.Format("Input button \"{0}\" released.", m_ButtonNames[i]));
+                        }
+
+                        if (onInputButtonUp != null)
+                        {
+                            onInputButtonUp.Invoke(m_ButtonNames[i]);
+                        }
+                    }
+                }
+                catch
+                {
+                    Debug.LogWarningFormat("Input Manager does not contain a button named \"{0}\".", m_ButtonNames[i]);
+                    m_ButtonNames.RemoveAt(i);
+                    continue;
                 }
             }
         }
