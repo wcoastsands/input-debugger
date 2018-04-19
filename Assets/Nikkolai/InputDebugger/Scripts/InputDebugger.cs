@@ -27,67 +27,44 @@ namespace Nikkolai
         float m_AxisValue = 0f;
         int m_ButtonIndex = 0;
 
-        readonly List<string> m_InvalidAxisNames = new List<string>();
+        // Validated list of axis names.
+        readonly List<string> m_AxisNames = new List<string>();
 
         void Start ()
         {
             // Only log joystick names from editor and development builds.
-            if (Debug.isDebugBuild) LogJoystickNames();
+            if (Debug.isDebugBuild)
+            {
+                LogJoystickNames();
+            }
         }
 
         void OnEnable ()
         {
             // Only debug inputs from editor and development builds.
             enabled = Debug.isDebugBuild;
-        }
 
-        void OnDisable ()
-        {
-            m_InvalidAxisNames.Clear();
+            if (enabled)
+            {
+                m_AxisNames.Clear();
+
+                for (int i = 0; i < axisNames.Length; i++)
+                {
+                    m_AxisNames.Add(axisNames[i]);
+                }
+            }
         }
 
         void Update ()
         {
             if (debugAxes)
             {
-                for (int i = 0; i < axisNames.Length; i++)
-                {
-                    if (string.IsNullOrEmpty(axisNames[i]) || m_InvalidAxisNames.Contains(axisNames[i]))
-                    {
-                        continue;
-                    }
-
-                    try
-                    {
-                        m_AxisValue = Input.GetAxis(axisNames[i]);
-                    }
-                    catch
-                    {
-                        Debug.LogWarningFormat("Input Manager does not contain an axis named \"{0}\".", axisNames[i]);
-                        m_InvalidAxisNames.Add(axisNames[i]);
-                        continue;
-                    }
-
-                    if (m_AxisValue != 0f)
-                    {
-                        Debug.Log(string.Format("\"{0}\" is active ({1}).", axisNames[i], m_AxisValue));
-                    }
-                }
+                DebugAxes();
             }
 
             if (debugButtons && Input.anyKeyDown)
             {
-                m_ButtonIndex = 0;
-
-                for (int i = 330; i <= 349; i++) // JoystickButton0 through JoystickButton19
-                {
-                    if (Input.GetKeyDown((KeyCode)i))
-                    {
-                        Debug.Log(string.Format("Gamepad button {0} pressed.", m_ButtonIndex));
-                    }
-
-                    m_ButtonIndex++;
-                }
+                DebugButtons();
             }
         }
 
@@ -105,6 +82,45 @@ namespace Nikkolai
             }
 
             Debug.Log(message.TrimEnd(','));
+        }
+
+        void DebugAxes ()
+        {
+            // Loop in reverse to avoid errors after the removal of invalid names.
+            for (int i = m_AxisNames.Count - 1; i >= 0; i--)
+            {
+                try
+                {
+                    m_AxisValue = Input.GetAxis(m_AxisNames[i]);
+                }
+                catch
+                {
+                    Debug.LogWarningFormat("Input Manager does not contain an axis named \"{0}\".", m_AxisNames[i]);
+                    m_AxisNames.RemoveAt(i);
+                    continue;
+                }
+
+                if (m_AxisValue != 0f)
+                {
+                    Debug.Log(string.Format("\"{0}\" is active ({1}).", m_AxisNames[i], m_AxisValue));
+                }
+            }
+        }
+
+        void DebugButtons ()
+        {
+            m_ButtonIndex = 0;
+
+            // For KeyCode values JoystickButton0 through JoystickButton19...
+            for (int i = 330; i <= 349; i++)
+            {
+                if (Input.GetKeyDown((KeyCode)i))
+                {
+                    Debug.Log(string.Format("Gamepad button {0} pressed.", m_ButtonIndex));
+                }
+
+                m_ButtonIndex++;
+            }
         }
     }
 }
