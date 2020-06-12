@@ -1,8 +1,7 @@
-# Input Debugger
+# Readme
 
-A utility for logging joystick button and axis inputs in Unity. See the the [Wiki][2] for more info.
+This documentation is for Nikkolai's Input Debugger package, a utility for logging controller inputs in Unity. 
 
-Please see [ProjectSettings/ProjectVersion.txt][1] for the version of Unity used to maintain this project.
+Please see the [changelog](CHANGELOG.md) for a list of releases and notable changes made to this project. See the the [Wiki][2] for more info.
 
-[1]: ./ProjectSettings/ProjectVersion.txt
 [2]: https://github.com/wcoastsands/input-debugger/wiki
