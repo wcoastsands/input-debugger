@@ -6,5 +6,6 @@
   "author": {
     "name": "Nikkolai Davenport",
     "url": "https://github.com/wcoastsands"
-  }
+  },
+  "description": "A utility for logging joystick axis and button inputs."
 }
