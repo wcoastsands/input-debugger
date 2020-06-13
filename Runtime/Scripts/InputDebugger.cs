@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Nikkolai
+namespace Nikkolai.InputDebugger
 {
     [HelpURL("https://github.com/wcoastsands/input-debugger/wiki")]
     public class InputDebugger : MonoBehaviour
