@@ -1,7 +1,7 @@
 {
   "name": "com.nikkolai.unity.inputdebugger",
   "version": "1.2.1",
-  "displayName": "Nikkolai's Input Debugger",
+  "displayName": "Nikkolai Input Debugger",
   "hideInEditor": false,
   "author": {
     "name": "Nikkolai Davenport",
