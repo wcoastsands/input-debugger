@@ -9,6 +9,6 @@
   },
   "description": "A utility for logging joystick axis and button inputs.",
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
+    "registry": "https://npm.pkg.github.com/@wcoastsands"
   }
 }
