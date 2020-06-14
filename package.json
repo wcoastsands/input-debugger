@@ -7,5 +7,8 @@
     "name": "Nikkolai Davenport",
     "url": "https://github.com/wcoastsands"
   },
-  "description": "A utility for logging joystick axis and button inputs."
+  "description": "A utility for logging joystick axis and button inputs.",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  }
 }
