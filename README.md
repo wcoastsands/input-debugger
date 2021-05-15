@@ -18,7 +18,7 @@ Steps for importing the asset package:
 
 ### Play the Demo
 Steps for running the demo:
-1. Open the _InputDebugger_ scene, located in _Assets/Nikkolai/InputDebugger_.
+1. Open the _InputDebugger_ scene, located in the _Runtime_ folder.
 1. With a controller connected to your PC, press the Play button to enter Play mode.
 1. Select the Game window to bring it into focus, and start logging controller inputs.
 
