@@ -1,7 +1,7 @@
 # Readme
-The _Unity Input Debugger_ is a utility for logging joystick axis and button inputs in Unity.
+The _Unity Input Debugger_ is a utility for logging joystick axis and button inputs in Unity. See the the [Wiki] for more info.
 
-Please see [CHANGELOG.md](CHANGELOG.md) for a list of releases and notable changes, and see the the [Wiki] for more info.
+Please see [CHANGELOG.md](CHANGELOG.md) for a list of releases and notable changes.
 
 ## Getting Started
 If planning to add this package through the Unity Package Manager (UPM), this package can be added to your project using one of the following methods: 
