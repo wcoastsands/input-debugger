@@ -5,9 +5,9 @@ Please see [CHANGELOG.md](CHANGELOG.md) for a list of releases and notable chang
 
 ## Getting Started
 If planning to add this package through the Unity Package Manager (UPM), this package can be added to your project using one of the following methods: 
-- by [installing from a Git URL][upm-ui-giturl],
-- by cloning the repository and [installing as a local package][upm-ui-local], or
-- by installing from the GitHub Package Registry if using Unity 2019.3.4f1 or newer.
+- [Installing from a Git URL][upm-ui-giturl]
+- Cloning the repository and [installing as a local package][upm-ui-local]
+- Installing from the GitHub Package Registry if using Unity 2019.3.4f1 or newer
 
 This package can also still be directly added to your project by downloading and importing the asset package provided with the latest release.
 
