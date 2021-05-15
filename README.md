@@ -25,7 +25,7 @@ Steps for running the demo:
 > _**Note:** The Game window must remain in focus for inputs to be logged during Play mode._
 
 ## Credits
-This _Unity Input Debugger_ was developed by [Nikkolai Davenport](https://github.com/wcoastsands).
+The _Unity Input Debugger_ was developed by [Nikkolai Davenport](https://github.com/wcoastsands).
 
 
 [Wiki]: https://github.com/wcoastsands/input-debugger/wiki
