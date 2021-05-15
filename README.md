@@ -14,7 +14,7 @@ This package can also still be directly added to your project by downloading and
 ### Download and Import
 Steps for importing the asset package:
 1. Download [InputDebugger.unitypackage] from release [v1.2.1].
-1. Double-click the downloaded .unitypackage to import the assets into Unity.
+1. Locate and double-click the download file to start importing the package into Unity.
 
 ### Play the Demo
 Steps for running the demo:
