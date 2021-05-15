@@ -9,7 +9,7 @@ If planning to add this package through the Unity Package Manager (UPM), this pa
 - by cloning the repository and [installing as a local package][upm-ui-local], or
 - by installing from the GitHub Package Registry if using Unity 2019.3.4f1 or newer.
 
-Alternatively, this package can still be directly added to your project by downloading and importing the asset package provided with the latest release.
+This package can also still be directly added to your project by downloading and importing the asset package provided with the latest release.
 
 ### Download and Import
 Steps for importing the asset package:
