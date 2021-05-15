@@ -2,7 +2,7 @@
 
 Nikkolai's Input Debugger is a utility for logging joystick axis and button inputs in Unity.
 
-Please see the the [Wiki] for more details. Also see [CHANGELOG.md](CHANGELOG.md) for a list of releases and notable changes.
+Please see [CHANGELOG.md](CHANGELOG.md) for a list of releases and notable changes, and see the the [Wiki] for more info.
 
 ## Getting Started
 
@@ -30,4 +30,5 @@ Alternatively, this package can still be directly added to your project by downl
 [upm-ui-giturl]: https://docs.unity3d.com/Manual/upm-ui-giturl.html
 [upm-ui-local]: https://docs.unity3d.com/Manual/upm-ui-local.html
 
-[v1.2.1]: releases/tag/v1.2.1
+[v1.2.1]: ../../releases/tag/v1.2.1
+[InputDebugger.unitypackage]: ../../releases/download/v1.2.1/InputDebugger.unitypackage
